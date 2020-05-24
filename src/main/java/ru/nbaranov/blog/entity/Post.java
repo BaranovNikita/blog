@@ -1,6 +1,5 @@
 package ru.nbaranov.blog.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -33,6 +32,5 @@ public class Post extends AbstractEntity {
             joinColumns = { @JoinColumn(name = "post_id") },
             inverseJoinColumns = { @JoinColumn(name = "category_id") }
     )
-    @JsonIgnore
     Set<Category> categories = new HashSet<>();
 }

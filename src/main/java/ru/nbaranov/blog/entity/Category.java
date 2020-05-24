@@ -1,9 +1,13 @@
 package ru.nbaranov.blog.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.HashSet;
@@ -18,10 +22,12 @@ public class Category extends AbstractEntity {
     @Size(min = 3, max = 40)
     @Column(length = 40, unique = true)
     private String title;
+
     @ManyToMany(mappedBy = "categories")
     private Set<Post> posts = new HashSet<>();
 
-    public Category(String title) {
-        this.title = title;
+    @JsonIgnore
+    public Set<Post> getPosts() {
+        return new HashSet<>();
     }
 }

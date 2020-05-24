@@ -1,11 +1,14 @@
 package ru.nbaranov.blog.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.nbaranov.blog.entity.Post;
 import ru.nbaranov.blog.reportistory.PostRepository;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -37,5 +40,11 @@ public class PostServiceImpl implements PostService {
     @Override
     public Post getPostByAlias(String alias) {
         return postRepository.findByAlias(alias);
+    }
+
+    @Override
+    public List<Post> getPosts(int page, int limit) {
+        var pr = PageRequest.of(page - 1, limit, Sort.by(Sort.Direction.DESC, "createdAt"));
+        return postRepository.findAll(pr).getContent();
     }
 }

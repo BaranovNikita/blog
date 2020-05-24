@@ -27,4 +27,9 @@ public class CategoryServiceImpl implements CategoryService {
             throw new CategoryAlreadyExists();
         }
     }
+
+    @Override
+    public Category getCategory(Long id) {
+        return repository.findById(id).orElse(null);
+    }
 }

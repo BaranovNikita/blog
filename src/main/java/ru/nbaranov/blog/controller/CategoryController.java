@@ -1,6 +1,5 @@
 package ru.nbaranov.blog.controller;
 
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -13,31 +12,23 @@ import ru.nbaranov.blog.entity.Category;
 import ru.nbaranov.blog.exception.CategoryAlreadyExists;
 import ru.nbaranov.blog.services.CategoryService;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = "/", produces = { MediaType.APPLICATION_JSON_VALUE }, consumes = { MediaType.APPLICATION_JSON_VALUE })
+@RequestMapping(value = "/category")
 public class CategoryController {
     @Autowired
     CategoryService categoryService;
 
-    @GetMapping("/ping")
-    public Long ping() {
-        return System.currentTimeMillis();
-    }
-
-    @GetMapping("/category")
-    @ResponseBody
+    @GetMapping
     public List<Category> getCategoryList() {
         return categoryService.getAll();
     }
 
-    @PostMapping(value = "/category", produces = { MediaType.TEXT_PLAIN_VALUE })
-    @ResponseBody
+    @PostMapping(produces = { MediaType.TEXT_PLAIN_VALUE })
     public ResponseEntity<String> createCategory(@Valid @RequestBody Category category) {
         categoryService.createCategory(category);
         return ResponseEntity.ok("OK");

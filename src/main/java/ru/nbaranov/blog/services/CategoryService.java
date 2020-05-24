@@ -8,4 +8,5 @@ import java.util.List;
 public interface CategoryService {
     List<Category> getAll();
     Category createCategory(Category category) throws CategoryAlreadyExists;
+    Category getCategory(Long id);
 }
