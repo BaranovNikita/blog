@@ -25,6 +25,8 @@ public class Post extends AbstractEntity {
     private String text;
     @NotBlank
     private String alias;
+    @NotBlank
+    private String description;
     private int viewCount = 0;
     @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(
