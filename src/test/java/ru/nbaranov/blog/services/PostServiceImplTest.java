@@ -27,6 +27,7 @@ class PostServiceImplTest {
         post.setTitle("test post title");
         post.setAuthor("author");
         post.setText("text");
+        post.setDescription("description");
         return post;
     }
 
