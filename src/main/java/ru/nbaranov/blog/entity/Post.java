@@ -24,6 +24,7 @@ public class Post extends AbstractEntity {
     @NotBlank
     private String text;
     @NotBlank
+    @Column(unique = true)
     private String alias;
     @NotBlank
     private String description;

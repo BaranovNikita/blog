@@ -1,10 +1,12 @@
 package ru.nbaranov.blog.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.nbaranov.blog.entity.Post;
+import ru.nbaranov.blog.exception.EntityAlreadyExists;
 import ru.nbaranov.blog.reportistory.PostRepository;
 
 import java.lang.reflect.InvocationTargetException;
@@ -17,17 +19,27 @@ public class PostServiceImpl implements PostService {
     PostRepository postRepository;
 
     @Override
-    public Post createPost(Post post) {
-        return postRepository.save(post);
+    public Post createPost(Post post) throws EntityAlreadyExists {
+        try {
+            return postRepository.save(post);
+        } catch (DataIntegrityViolationException e) {
+            throw new EntityAlreadyExists("alias", "Post with current alias already exists");
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @Override
-    public Post updatePost(Long id, Map<String, Object> properties) throws InvocationTargetException, IllegalAccessException {
+    public Post updatePost(Long id, Map<String, Object> properties) throws InvocationTargetException, IllegalAccessException, EntityAlreadyExists {
         var existsPost = postRepository.findById(id);
         if (existsPost.isPresent()) {
             var post = existsPost.get();
             org.apache.commons.beanutils.BeanUtils.populate(post, properties);
-            return postRepository.save(post);
+            try {
+                return postRepository.save(post);
+            } catch (DataIntegrityViolationException e) {
+                throw new EntityAlreadyExists("alias", "Category with current alias already exists");
+            }
         }
         return null;
     }

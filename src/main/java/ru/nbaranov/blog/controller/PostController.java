@@ -2,22 +2,22 @@ package ru.nbaranov.blog.controller;
 
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import ru.nbaranov.blog.entity.Post;
 import ru.nbaranov.blog.services.CategoryService;
 import ru.nbaranov.blog.services.PostService;
 
 import javax.validation.Valid;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/post")
-public class PostController {
+public class PostController extends AbstractController {
     @Autowired
     PostService postService;
     @Autowired
@@ -49,34 +49,9 @@ public class PostController {
         if (catIds.isPresent()) {
             var categories = Arrays.stream(catIds.get()).map(id -> categoryService.getCategory(id)).filter(Objects::nonNull).collect(Collectors.toSet());
             post.setCategories(categories);
-            try {
-                return postService.createPost(post);
-            } catch (Exception e) {
-                return null;
-            }
-
+            return postService.createPost(post);
         }
         return null;
-    }
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Map<String, String> handleValidationExceptions(
-            MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getAllErrors().forEach((error) -> {
-            String fieldName = ((FieldError) error).getField();
-            String errorMessage = error.getDefaultMessage();
-            errors.put(fieldName, errorMessage);
-        });
-        return errors;
-    }
-
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(NotFoundException.class)
-    public String handleNotFoundExceptions(
-            NotFoundException ex) {
-        return "";
     }
 
 }
