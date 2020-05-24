@@ -13,18 +13,19 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import ru.nbaranov.blog.services.CategoryService;
+import static org.hamcrest.core.AnyOf.*;
 
 import java.nio.charset.StandardCharsets;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest
 @AutoConfigureMockMvc
-class BlogControllerIntegrationTest {
+class CategoryControllerIntegrationTest {
     @MockBean
     private CategoryService categoryService;
 
     @Autowired
-    BlogController blogController;
+    CategoryController categoryController;
 
     @Autowired
     MockMvc mockMvc;
@@ -48,7 +49,7 @@ class BlogControllerIntegrationTest {
                 .content(category)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.title", Is.is("size must be between 3 and 40")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.title", anyOf(Is.is("size must be between 3 and 40"), Is.is("Title is required"))))
                 .andExpect(MockMvcResultMatchers.content()
                         .contentType(MediaType.APPLICATION_JSON));
     }

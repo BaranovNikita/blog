@@ -1,6 +1,8 @@
 package ru.nbaranov.blog.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -9,6 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name = "post")
 public class Post extends AbstractEntity {
@@ -19,7 +22,9 @@ public class Post extends AbstractEntity {
     @NotBlank
     private String author;
     @Lob
+    @NotBlank
     private String text;
+    @NotBlank
     private String alias;
     private int viewCount = 0;
     @ManyToMany(cascade = { CascadeType.ALL })
@@ -28,5 +33,6 @@ public class Post extends AbstractEntity {
             joinColumns = { @JoinColumn(name = "post_id") },
             inverseJoinColumns = { @JoinColumn(name = "category_id") }
     )
+    @JsonIgnore
     Set<Category> categories = new HashSet<>();
 }
