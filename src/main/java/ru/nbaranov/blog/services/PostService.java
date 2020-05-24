@@ -13,4 +13,6 @@ public interface PostService {
     void deletePost(Long id);
     Post getPostByAlias(String alias);
     List<Post> getPosts(int page, int limit);
+    long count();
+    void clear();
 }

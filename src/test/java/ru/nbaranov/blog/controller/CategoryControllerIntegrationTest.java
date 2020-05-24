@@ -13,9 +13,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import ru.nbaranov.blog.services.CategoryService;
-import static org.hamcrest.core.AnyOf.*;
+import ru.nbaranov.blog.services.PostService;
 
 import java.nio.charset.StandardCharsets;
+
+import static org.hamcrest.core.AnyOf.anyOf;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest
@@ -23,6 +25,8 @@ import java.nio.charset.StandardCharsets;
 class CategoryControllerIntegrationTest {
     @MockBean
     private CategoryService categoryService;
+    @MockBean
+    private PostService postService;
 
     @Autowired
     CategoryController categoryController;

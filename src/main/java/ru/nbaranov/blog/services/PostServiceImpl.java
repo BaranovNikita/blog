@@ -59,4 +59,14 @@ public class PostServiceImpl implements PostService {
         var pr = PageRequest.of(page - 1, limit, Sort.by(Sort.Direction.DESC, "createdAt"));
         return postRepository.findAll(pr).getContent();
     }
+
+    @Override
+    public long count() {
+        return postRepository.count();
+    }
+
+    @Override
+    public void clear() {
+        postRepository.deleteAll();
+    }
 }

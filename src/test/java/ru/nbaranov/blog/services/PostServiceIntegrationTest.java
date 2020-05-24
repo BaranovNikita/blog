@@ -1,5 +1,6 @@
 package ru.nbaranov.blog.services;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,11 @@ import static org.springframework.test.util.AssertionErrors.assertTrue;
 public class PostServiceIntegrationTest {
     @Autowired
     private PostService postService;
+
+    @AfterEach
+    public void clearDB() {
+        postService.clear();
+    }
 
     private Post getTestPost() {
         var post = new Post();
@@ -39,5 +45,12 @@ public class PostServiceIntegrationTest {
         var updatedPost = postService.updatePost(id, parameters);
         assertTrue("Updated post has correct title", updatedPost.getTitle().contains("updated"));
         assertTrue("Updated post has correct text", updatedPost.getText().contains("updated"));
+    }
+
+    @Test
+    public void countTest() {
+        var post = getTestPost();
+        postService.createPost(post);
+        assertTrue("post count should be 1", postService.count() == 1);
     }
 }

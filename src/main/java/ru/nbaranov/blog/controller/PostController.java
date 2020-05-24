@@ -53,5 +53,8 @@ public class PostController extends AbstractController {
         }
         return null;
     }
-
+    @GetMapping("/count")
+    long getPostCount() {
+        return postService.count();
+    }
 }
